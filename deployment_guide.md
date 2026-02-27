@@ -1,4 +1,63 @@
-# 🚀 QuickHire Deployment Guide (Free Tier)
+# 🚀 QuickHire Job Board
+
+**QuickHire** is a modern, full-stack mini job board application. It allows users to browse job listings, search and filter for specific keywords or categories, and submit applications. An integrated admin dashboard permits authorized users to post new jobs and view received applicant information.
+
+## 🛠️ Technology Stack
+- **Frontend**: React.js, Vite, Tailwind CSS (v4), React Router, Lucide Icons
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL (hosted on Supabase)
+- **Deployment**: Vercel (Frontend), Render (Backend)
+
+---
+
+## 💻 Local Development Setup
+
+Follow these steps to run the QuickHire project locally on your machine.
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed on your computer.
+
+### 1. Database Configuration
+The application connects directly to a cloud **Supabase PostgreSQL** database. The backend is configured to connect to it via connection string.
+
+### 2. Backend Setup
+1. Open a terminal and navigate to the backend folder:
+   ```bash
+   cd quickhire-backend
+   ```
+2. Install the necessary dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the `quickhire-backend` directory and add the following variables:
+   ```env
+   PORT=5000
+   DATABASE_URL=postgresql://postgres.xmghjdqpadamluxkrijp:Task_QuickHire_Qtec@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres
+   ```
+4. Start the backend development server:
+   ```bash
+   npm run dev
+   ```
+*(The backend will run on `http://localhost:5000`)*
+
+### 3. Frontend Setup
+1. Open a **new** terminal tab and navigate to the frontend folder:
+   ```bash
+   cd quickhire-frontend
+   ```
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+*(The frontend will run on `http://localhost:5173`)*
+
+---
+
+# ☁️ Live Deployment Guide (Free Tier)
 
 This guide will walk you through hosting your QuickHire application entirely for free using **Vercel** for the React Frontend and **Render** for the Node.js Backend. Since you are already using **Supabase** for the database, your data is already hosted in the cloud!
 
