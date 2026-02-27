@@ -17,4 +17,6 @@ router.post(
     applicationController.submitApplication
 );
 
+router.get('/', applicationController.getAllApplications);
+
 module.exports = router;

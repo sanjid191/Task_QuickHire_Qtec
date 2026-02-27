@@ -23,3 +23,21 @@ exports.submitApplication = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
+// @route   GET /api/applications
+// @desc    Get all applications
+exports.getAllApplications = async (req, res) => {
+    try {
+        const query = `
+            SELECT a.*, j.title as job_title, j.company as job_company 
+            FROM applications a 
+            LEFT JOIN jobs j ON a.job_id = j.id
+            ORDER BY a.created_at DESC
+        `;
+        const { rows } = await db.query(query);
+        res.json(rows);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }
+};
