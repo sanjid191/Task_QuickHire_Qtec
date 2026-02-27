@@ -61,7 +61,11 @@ Vercel is the creator of Next.js but is also the fastest place to host Vite/Reac
    - **Build Command**: Leave default (`npm run build`).
    - **Output Directory**: Leave default (`dist`).
 5. **Set Environment Variables**: 
-   If you used an environment variable like `VITE_API_URL` for the backend, add it here in the Environment Variables dropdown.
+   Before you click Deploy, expand the **Environment Variables** section and add this variable exactly:
+   
+   - **Key:** `VITE_API_URL`
+   - **Value:** `https://task-quickhire-qtec.onrender.com/api`
+
 6. **Deploy**: Click **Deploy**. Vercel will build the React app.
 
 ---
