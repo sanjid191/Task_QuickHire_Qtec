@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/ui/SearchBar';
 import CompanyLogos from '../components/ui/CompanyLogos';
 import CategoryCard from '../components/ui/CategoryCard';
 import JobCard from '../components/ui/JobCard';
+import { jobApi } from '../api/jobsApi';
 
 export default function Home() {
     const categories = [
@@ -17,23 +19,37 @@ export default function Home() {
         { title: 'Human Resource', count: 346, iconName: 'Users', isActive: false },
     ];
 
-    const featuredJobs = [
-        { id: 1, title: 'Email Marketing', company: 'Revolut', location: 'Madrid, Spain', type: 'Full Time', categories: ['Marketing', 'Design'], logoInitial: 'R', logoColor: 'bg-black' },
-        { id: 2, title: 'Brand Designer', company: 'Dropbox', location: 'San Fransisco, US', type: 'Full Time', categories: ['Design', 'Business'], logoInitial: 'D', logoColor: 'bg-blue-600' },
-        { id: 3, title: 'Email Marketing', company: 'Pitch', location: 'Berlin, Germany', type: 'Full Time', categories: ['Marketing'], logoInitial: 'P', logoColor: 'bg-teal-600' },
-        { id: 4, title: 'Visual Designer', company: 'Blinklist', location: 'Granada, Spain', type: 'Full Time', categories: ['Design'], logoInitial: 'V', logoColor: 'bg-green-500' },
-        { id: 5, title: 'Product Designer', company: 'ClassPass', location: 'Manchester, UK', type: 'Full Time', categories: ['Marketing', 'Design'], logoInitial: 'C', logoColor: 'bg-blue-500' },
-        { id: 6, title: 'Lead Designer', company: 'Canva', location: 'Ontario, Canada', type: 'Full Time', categories: ['Design', 'Business'], logoInitial: 'L', logoColor: 'bg-cyan-500' },
-        { id: 7, title: 'Brand Strategist', company: 'GoDaddy', location: 'Marseille, France', type: 'Full Time', categories: ['Marketing'], logoInitial: 'G', logoColor: 'bg-green-600' },
-        { id: 8, title: 'Data Analyst', company: 'Twitter', location: 'San Diego, US', type: 'Full Time', categories: ['Technology'], logoInitial: 't', logoColor: 'bg-sky-500' }
-    ];
+    const [jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const latestJobs = [
-        { id: 9, title: 'Social Media Assistant', company: 'Nomad', location: 'Paris, France', type: 'Full-Time', categories: ['Marketing', 'Design'], logoInitial: 'N', logoColor: 'bg-emerald-500' },
-        { id: 10, title: 'Brand Designer', company: 'Dropbox', location: 'San Fransisco, USA', type: 'Full-Time', categories: ['Marketing', 'Design'], logoInitial: 'D', logoColor: 'bg-blue-600' },
-        { id: 11, title: 'Interactive Developer', company: 'Terraform', location: 'Hamburg, Germany', type: 'Full-Time', categories: ['Marketing', 'Design'], logoInitial: 'T', logoColor: 'bg-cyan-500' },
-        { id: 12, title: 'HR Manager', company: 'Packer', location: 'Lucern, Switzerland', type: 'Full-Time', categories: ['Marketing', 'Design'], logoInitial: 'P', logoColor: 'bg-orange-500' }
-    ];
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const data = await jobApi.getAll({});
+                setJobs(data);
+            } catch (err) {
+                console.error("Failed to fetch jobs for Home page", err);
+                // Fallback demo data
+                setJobs([
+                    { id: 1, title: 'Email Marketing', company: 'Revolut', location: 'Madrid, Spain', type: 'Full Time', category: 'Marketing', logoInitial: 'R', logoColor: 'bg-black' },
+                    { id: 2, title: 'Brand Designer', company: 'Dropbox', location: 'San Fransisco, US', type: 'Full Time', category: 'Design', logoInitial: 'D', logoColor: 'bg-blue-600' },
+                    { id: 3, title: 'Email Marketing', company: 'Pitch', location: 'Berlin, Germany', type: 'Full Time', category: 'Marketing', logoInitial: 'P', logoColor: 'bg-teal-600' },
+                    { id: 4, title: 'Visual Designer', company: 'Blinklist', location: 'Granada, Spain', type: 'Full Time', category: 'Design', logoInitial: 'V', logoColor: 'bg-green-500' },
+                    { id: 5, title: 'Product Designer', company: 'ClassPass', location: 'Manchester, UK', type: 'Full Time', category: 'Design', logoInitial: 'C', logoColor: 'bg-blue-500' },
+                    { id: 6, title: 'Lead Designer', company: 'Canva', location: 'Ontario, Canada', type: 'Full Time', category: 'Design', logoInitial: 'L', logoColor: 'bg-cyan-500' },
+                    { id: 7, title: 'Brand Strategist', company: 'GoDaddy', location: 'Marseille, France', type: 'Full Time', category: 'Marketing', logoInitial: 'G', logoColor: 'bg-green-600' },
+                    { id: 8, title: 'Data Analyst', company: 'Twitter', location: 'San Diego, US', type: 'Full Time', category: 'Technology', logoInitial: 't', logoColor: 'bg-sky-500' }
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchJobs();
+    }, []);
+
+    // Split jobs for featured (first 8) and latest (next 4)
+    const featuredJobs = jobs.slice(0, 8);
+    const latestJobs = jobs.slice(8, 12);
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
@@ -153,9 +169,15 @@ export default function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {featuredJobs.map(job => (
-                            <JobCard key={job.id} {...job} layout="grid" />
-                        ))}
+                        {loading ? (
+                            <div className="col-span-full py-12 text-center text-gray-500">Loading featured jobs...</div>
+                        ) : featuredJobs.length > 0 ? (
+                            featuredJobs.map(job => (
+                                <JobCard key={job.id} {...job} categories={[job.category]} layout="grid" />
+                            ))
+                        ) : (
+                            <div className="col-span-full py-12 text-center text-gray-500">No jobs found.</div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -173,9 +195,15 @@ export default function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {latestJobs.map(job => (
-                            <JobCard key={job.id} {...job} layout="list" />
-                        ))}
+                        {loading ? (
+                            <div className="col-span-full py-12 text-center text-gray-500">Loading latest jobs...</div>
+                        ) : latestJobs.length > 0 ? (
+                            latestJobs.map(job => (
+                                <JobCard key={job.id} {...job} categories={[job.category]} layout="list" />
+                            ))
+                        ) : (
+                            <div className="col-span-full py-12 text-center text-gray-500">No more jobs currently available.</div>
+                        )}
                     </div>
                 </div>
             </section>
