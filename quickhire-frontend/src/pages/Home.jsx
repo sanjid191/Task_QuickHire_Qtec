@@ -11,7 +11,7 @@ export default function Home() {
     const categories = [
         { title: 'Design', count: 235, iconName: 'PenTool', isActive: false },
         { title: 'Sales', count: 756, iconName: 'TrendingUp', isActive: false },
-        { title: 'Marketing', count: 140, iconName: 'Megaphone', isActive: true },
+        { title: 'Marketing', count: 140, iconName: 'Megaphone', isActive: false },
         { title: 'Finance', count: 325, iconName: 'Briefcase', isActive: false },
         { title: 'Technology', count: 436, iconName: 'MonitorDrop', isActive: false },
         { title: 'Engineering', count: 542, iconName: 'Code', isActive: false },
