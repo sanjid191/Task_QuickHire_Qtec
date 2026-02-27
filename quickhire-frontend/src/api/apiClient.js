@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:5000/api', // Default local backend URL
+    baseURL: 'https://task-quickhire-qtec.onrender.com/api', // Live Render backend URL
     headers: {
         'Content-Type': 'application/json'
     }

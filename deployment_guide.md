@@ -27,9 +27,13 @@ Render is a fantastic free platform for hosting Node.js APIs.
    - **Start Command**: `npm start` (or `node src/app.js`)
    - **Instance Type**: Select the **Free** tier.
 5. **Set Environment Variables**:
-   Scroll down to the "Environment Variables" section and add the exact same variables from your `quickhire-backend/.env` file:
-   - Key: `PORT`, Value: `5000`
-   - Key: `DATABASE_URL`, Value: `postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres` *(Copy the Session Pooler string from Supabase)*
+   Scroll down to the "Environment Variables" section in Render and click **Add Environment Variable**. Add these exactly as they are here:
+   
+   - **Key:** `PORT`
+   - **Value:** `5000`
+
+   - **Key:** `DATABASE_URL`
+   - **Value:** `postgresql://postgres.xmghjdqpadamluxkrijp:Task_QuickHire_Qtec@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres`
 6. **Deploy**: Click **Create Web Service**. Render will now build and deploy your backend. It might take 2-3 minutes.
 7. **Copy URL**: Once it says "Live", copy the Render URL at the top of the screen (e.g., `https://quickhire-api.onrender.com`).
 
