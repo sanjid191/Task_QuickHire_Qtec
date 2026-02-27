@@ -1,23 +1,33 @@
 import { useState, useEffect } from 'react';
 import { Search, MapPin, Briefcase } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import { jobApi } from '../api/jobsApi';
 import JobCard from '../components/ui/JobCard';
 
 export default function Jobs() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [filters, setFilters] = useState({
-        search: '',
-        location: '',
-        category: ''
+        search: searchParams.get('search') || '',
+        location: searchParams.get('location') || '',
+        category: searchParams.get('category') || ''
     });
 
     const fetchJobs = async () => {
         try {
             setLoading(true);
-            const data = await jobApi.getAll(filters);
+
+            // Read from URL parameters directly to ensure accuracy when navigating from Home
+            const currentParams = {
+                search: searchParams.get('search') || '',
+                location: searchParams.get('location') || '',
+                category: searchParams.get('category') || ''
+            };
+
+            const data = await jobApi.getAll(currentParams);
             setJobs(data);
             setError(null);
         } catch (err) {
@@ -36,14 +46,22 @@ export default function Jobs() {
         }
     };
 
+    // Fetch when url parameters change
     useEffect(() => {
         fetchJobs();
         // eslint-disable-next-line
-    }, []); // Initial load only, manual search triggers subsequent fetches
+    }, [searchParams]);
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchJobs();
+
+        // Update URL to match new filters (which triggers useEffect)
+        const params = new URLSearchParams();
+        if (filters.search) params.append('search', filters.search);
+        if (filters.location) params.append('location', filters.location);
+        if (filters.category) params.append('category', filters.category);
+
+        setSearchParams(params);
     };
 
     const handleFilterChange = (e) => {
@@ -115,14 +133,18 @@ export default function Jobs() {
                                 >
                                     <option value="">All Categories</option>
                                     <option value="Design">Design</option>
+                                    <option value="Sales">Sales</option>
                                     <option value="Marketing">Marketing</option>
+                                    <option value="Finance">Finance</option>
                                     <option value="Technology">Technology</option>
+                                    <option value="Engineering">Engineering</option>
                                     <option value="Business">Business</option>
+                                    <option value="Human Resource">Human Resource</option>
                                 </select>
                             </div>
 
                             <button
-                                onClick={fetchJobs}
+                                onClick={handleSearch}
                                 className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-md font-medium transition-colors text-sm"
                             >
                                 Apply Filters
