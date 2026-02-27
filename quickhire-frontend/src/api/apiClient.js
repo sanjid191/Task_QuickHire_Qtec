@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'https://task-quickhire-qtec.onrender.com/api', // Live Render backend URL
+    baseURL: import.meta.env.VITE_API_URL || 'https://task-quickhire-qtec.onrender.com/api', // Vercel env or Live Render fallback
     headers: {
         'Content-Type': 'application/json'
     }
